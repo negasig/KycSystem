@@ -34,4 +34,8 @@ public class Maincontroller {
         customer1.setGender(customer.getGender());
        return crepository.save(customer1);
     }
+    @PostMapping("/login")
+    public String login(){
+        return "Loged in";
+    }
 }
