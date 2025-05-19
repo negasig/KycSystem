@@ -2,8 +2,9 @@ package com.example.kycsystem_demo.Controller;
 
 import com.example.kycsystem_demo.Model.Customer;
 import com.example.kycsystem_demo.Repository.CustomerRepository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,15 +16,27 @@ public class Maincontroller {
     @Autowired
     CustomerRepository crepository;
     @GetMapping("/customers")
-    public List<Customer> getCustomers(){
-        return crepository.findAll();
+    public Object getCustomers(){
+        List<Customer> lc=crepository.findAll();
+        if(lc.size()<1){
+            return "No records";
+        }
+        else {
+            return lc;
+        }
     }
     @GetMapping("/customer/{id}")
-    public Optional<Customer> getCustomerByid(@PathVariable int id){
-        return crepository.findById(id);
+    public Object getCustomerByid(@PathVariable int id){
+        Optional<Customer> lc=crepository.findById(id);
+        if(lc.isEmpty()){
+            return "No record found with id  " +id;
+        }
+        else {
+            return lc;
+        }
     }
     @PostMapping("/addCustomer")
-    public Customer registerCustomer(@RequestBody Customer customer){
+    public Customer registerCustomer(@NotNull @Valid @RequestBody Customer customer  ){
         Customer customer1=new Customer();
         customer1.setFirstName(customer.getFirstName());
         customer1.setLastName(customer.getLastName());

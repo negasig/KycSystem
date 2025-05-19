@@ -21,6 +21,10 @@ public class Customer {
     public String getFirstName() {
         return firstName;
     }
+    public Integer getId(){
+        return id;
+    }
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
