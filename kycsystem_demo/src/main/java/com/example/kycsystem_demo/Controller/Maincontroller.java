@@ -48,7 +48,8 @@ public class Maincontroller {
        return crepository.save(customer1);
     }
     @PostMapping("/login")
-    public String login(){
+    public Object login(@RequestBody Customer customer){
+        List<Customer> customer1=crepository.findByusername(customer.getFirstName());
         return "Loged in";
     }
 }
