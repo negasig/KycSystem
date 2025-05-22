@@ -40,6 +40,7 @@ public class Maincontroller {
     }
     @GetMapping("/customer/{id}")
     public Object getCustomerByid(@PathVariable int id){
+
         Optional<Customer> lc=crepository.findById(id);
         if(lc.isEmpty()){
             return "No record found with id  " +id;
@@ -49,24 +50,33 @@ public class Maincontroller {
         }
     }
     @PostMapping("/addCustomer")
-    public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer  ){
-        Customer customer1=new Customer();
-        customer1.setFirstName(customer.getFirstName());
-        customer1.setLastName(customer.getLastName());
-        customer1.setProfession(customer.getProfession());
-        customer1.setEmail(customer.getEmail());
-        customer1.setAge(customer.getAge());
-        customer1.setSalary(customer.getSalary());
-        customer1.setGender(customer.getGender());
-        customer1.setUsername(customer.getUsername());
-        customer1.setPassword(customer.getPassword());
-       crepository.save(customer1);
-       return ResponseEntity.ok("Customer saved");
+    public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer  ) {
+        List<Customer> customer11 = crepository.findByusername(customer.getUsername());
+        if (customer11.isEmpty()) {
+
+            Customer customer1=new Customer();
+            customer1.setFirstName(customer.getFirstName());
+            customer1.setLastName(customer.getLastName());
+            customer1.setProfession(customer.getProfession());
+            customer1.setEmail(customer.getEmail());
+            customer1.setAge(customer.getAge());
+            customer1.setSalary(customer.getSalary());
+            customer1.setGender(customer.getGender());
+            customer1.setUsername(customer.getUsername());
+            customer1.setPassword(customer.getPassword());
+            crepository.save(customer1);
+            return ResponseEntity.ok("Customer saved");
+        }
+        else {
+            return ResponseEntity.ok("user already exists");
+
+        }
     }
     @PostMapping("/login")
     public Object login(@RequestBody Customer customer){
-        List<Customer> customer1=crepository.findByusername(customer.getFirstName());
-        if(customer1.size()==1){
+        List<Customer> customer1=crepository.findByusername(customer.getUsername());
+        if(customer1.get(0).getUsername().equals(customer.getUsername())
+                && customer1.get(0).getPassword().equals(customer.getPassword())){
             return Jwts.builder()
                     .subject(customer.getUsername())
                     .signWith(getSigninkey())
@@ -74,7 +84,7 @@ public class Maincontroller {
                     .compact();
         }
         else {
-            return "invalid user";
+            return "you have enterd incorrect credientials";
         }
     }
 }
