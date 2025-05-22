@@ -1,6 +1,8 @@
 package com.example.kycsystem_demo.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.id.factory.internal.AutoGenerationTypeStrategy;
 
 @Entity
@@ -10,21 +12,25 @@ public class Customer {
     @Id
 
     private Integer id;
+    @NotNull(message = "First name is required")
     private String firstName;
+    @NotEmpty(message = "last name is required")
     private String lastName;
     private String Profession;
+    private  String username;
+    private String password;
     private int Age;
     private double Salary;
     private String Email;
     private String Gender;
 
-    public String getFirstName() {
-        return firstName;
-    }
-    public Integer getId(){
+    public Integer getId() {
         return id;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -44,6 +50,22 @@ public class Customer {
 
     public void setProfession(String profession) {
         Profession = profession;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getAge() {
