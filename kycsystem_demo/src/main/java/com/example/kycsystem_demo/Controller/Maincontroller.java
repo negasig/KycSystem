@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequestMapping("/Api/v1")
 @RestController
 public class Maincontroller {
-    private String jwtSecret = "negasihadush";
+    private String jwtSecret = "negasihadusdfsjfsadfsdgfsjgfshdfsgfsgfdsgfg2526485634573563845638456358345634sh";
     private Key getSigninkey(){
         byte[] keybaytes= Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keybaytes);
@@ -66,10 +66,15 @@ public class Maincontroller {
     @PostMapping("/login")
     public Object login(@RequestBody Customer customer){
         List<Customer> customer1=crepository.findByusername(customer.getFirstName());
-        return Jwts.builder()
-                .subject(customer.getUsername())
-                .signWith(getSigninkey())
-                .claim("name", customer1)
-                .compact();
+        if(customer1.size()==1){
+            return Jwts.builder()
+                    .subject(customer.getUsername())
+                    .signWith(getSigninkey())
+                    .claim("name", customer1)
+                    .compact();
+        }
+        else {
+            return "invalid user";
+        }
     }
 }
