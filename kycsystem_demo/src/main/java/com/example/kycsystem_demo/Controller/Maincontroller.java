@@ -54,7 +54,7 @@ public class Maincontroller {
     @GetMapping("/customer/{id}")
 
     public ResponseEntity<UserDTO> getCustomerByid(@PathVariable @Positive int id) {
-       Customer lc =crepository.findById(id);
+            Customer lc =crepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
             UserDTO userDTO=new UserDTO(lc.getFirstName(),lc.getLastName(),lc.getProfession(),lc.getAge(),lc.getGender());
             return ResponseEntity.ok(userDTO);
     }
