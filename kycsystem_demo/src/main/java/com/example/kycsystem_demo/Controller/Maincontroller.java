@@ -1,6 +1,7 @@
 package com.example.kycsystem_demo.Controller;
 
 import com.example.kycsystem_demo.Model.Customer;
+import com.example.kycsystem_demo.Model.UserDTO;
 import com.example.kycsystem_demo.Ratelimitservice;
 import com.example.kycsystem_demo.Repository.CustomerRepository;
 import io.github.bucket4j.Bucket;
@@ -52,13 +53,10 @@ public class Maincontroller {
 
     @GetMapping("/customer/{id}")
 
-    public Object getCustomerByid(@PathVariable @Positive int id) {
-        Optional<Customer> lc = crepository.findById(id);
-        if (lc.isEmpty()) {
-            return "No record found with id  " + id;
-        } else {
-            return lc;
-        }
+    public ResponseEntity<UserDTO> getCustomerByid(@PathVariable @Positive int id) {
+       Customer lc =crepository.findById(id);
+            UserDTO userDTO=new UserDTO(lc.getFirstName(),lc.getLastName(),lc.getProfession(),lc.getAge(),lc.getGender());
+            return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping("/addCustomer")
