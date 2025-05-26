@@ -3,10 +3,12 @@ package com.example.kycsystem_demo.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.hibernate.id.factory.internal.AutoGenerationTypeStrategy;
 
 @Entity
 @Table
+@Data
 public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -23,6 +25,7 @@ public class Customer {
     private double Salary;
     private String Email;
     private String Gender;
+    private String role;
 
     public Integer getId() {
         return id;
@@ -90,6 +93,14 @@ public class Customer {
 
     public void setEmail(String email) {
         Email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getGender() {
