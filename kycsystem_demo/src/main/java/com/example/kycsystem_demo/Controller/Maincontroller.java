@@ -65,7 +65,7 @@ public class Maincontroller {
     public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer) {
         List<Customer> customer11 = crepository.findByusername(customer.getUsername());
         List<Nationalid> ni=nationaidRepo.findByFiydaNumber(customer.getNationalId());
-        if (customer11.isEmpty() ) {
+        if (customer11.isEmpty() && ni.size()==1) {
 
             Customer customer1=new Customer();
             String password=BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt(10));
