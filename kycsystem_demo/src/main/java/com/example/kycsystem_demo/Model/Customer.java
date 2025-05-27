@@ -19,6 +19,16 @@ public class Customer {
     @NotEmpty(message = "last name is required")
     private String lastName;
     private String Profession;
+    private Long nationalId;
+
+    public Long getNationalId() {
+        return nationalId;
+    }
+
+    public void setNationalId(Long nationalId) {
+        this.nationalId = nationalId;
+    }
+
     private  String username;
     private String password;
     private int Age;

@@ -1,9 +1,11 @@
 package com.example.kycsystem_demo.Controller;
 
 import com.example.kycsystem_demo.Model.Customer;
+import com.example.kycsystem_demo.Model.Nationalid;
 import com.example.kycsystem_demo.Model.UserDTO;
 import com.example.kycsystem_demo.Ratelimitservice;
 import com.example.kycsystem_demo.Repository.CustomerRepository;
+import com.example.kycsystem_demo.Repository.NationalIdRepo;
 import io.github.bucket4j.Bucket;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -22,9 +24,6 @@ import javax.crypto.SecretKey;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import static io.jsonwebtoken.Jwts.*;
 
 @RequestMapping("/Api/v1")
 @RestController
@@ -41,6 +40,7 @@ public class Maincontroller {
     CustomerRepository crepository;
     @Autowired
     Ratelimitservice ratelimitservice;
+    NationalIdRepo nationaidRepo;
 
     @GetMapping("/customers")
     public Object getCustomers() {
@@ -62,9 +62,10 @@ public class Maincontroller {
 
     @PostMapping("/addCustomer")
 
-    public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer  ) {
+    public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer) {
         List<Customer> customer11 = crepository.findByusername(customer.getUsername());
-        if (customer11.isEmpty()) {
+        List<Nationalid> ni=nationaidRepo.findByFiydaNumber(customer.getNationalId());
+        if (customer11.isEmpty() ) {
 
             Customer customer1=new Customer();
             String password=BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt(10));
@@ -78,6 +79,7 @@ public class Maincontroller {
             customer1.setUsername(customer.getUsername());
             customer1.setPassword(password);
             customer1.setRole(customer.getRole());
+            customer1.setNationalId(customer.getNationalId());
             crepository.save(customer1);
             return ResponseEntity.ok("Customer saved");
         }
