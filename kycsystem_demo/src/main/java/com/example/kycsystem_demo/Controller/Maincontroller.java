@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class Maincontroller {
     CustomerRepository crepository;
     @Autowired
     Ratelimitservice ratelimitservice;
+    @Autowired
     NationalIdRepo nationaidRepo;
 
     @GetMapping("/customers")
@@ -56,16 +58,28 @@ public class Maincontroller {
 
     public ResponseEntity<UserDTO> getCustomerByid(@PathVariable @Positive int id) {
         Customer lc =crepository.findById(id).get();
-        UserDTO userDTO=new UserDTO(lc.getFirstName(),lc.getLastName(),lc.getProfession(),lc.getAge(),lc.getGender(), lc.getEmail());
+        UserDTO userDTO=new UserDTO(lc.getFirstName(),lc.getLastName(),lc.getProfession(),lc.getAge(),lc.getGender(), lc.getEmail(), lc.getNationalid(), lc.getPhonenumber());
         return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping("/addCustomer")
 
     public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer) {
-        List<Customer> customer11 = crepository.findByusername(customer.getUsername());
-        List<Nationalid> ni=nationaidRepo.findByFiydaNumber(customer.getNationalId());
-        if (customer11.isEmpty() && ni.size()==1) {
+        List<Customer> customer11 = (List<Customer>) crepository.findByusername(customer.getUsername());
+        List<Nationalid> ni=nationaidRepo.findByFiydaNumber(customer.getNationalid());
+        List<Customer> checknatid =crepository.findBynationalid(customer.getNationalid());
+
+
+        if (!customer11.isEmpty()){
+            return ResponseEntity.ok("Customer already registerd");
+        }
+        else if (ni.isEmpty()){
+            ResponseEntity.ok("incorrect national id");
+        }
+       else if (!checknatid.isEmpty() ){
+            return ResponseEntity.ok("Customer with national id "+customer.getNationalid()+" is already registerd");
+        }
+        else if (customer11.isEmpty() && checknatid.isEmpty()) {
 
             Customer customer1=new Customer();
             String password=BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt(10));
@@ -77,16 +91,15 @@ public class Maincontroller {
             customer1.setSalary(customer.getSalary());
             customer1.setGender(customer.getGender());
             customer1.setUsername(customer.getUsername());
+            customer1.setPhonenumber(customer.getPhonenumber());
             customer1.setPassword(password);
             customer1.setRole(customer.getRole());
-            customer1.setNationalId(customer.getNationalId());
+            customer1.setNationalid(customer.getNationalid());
             crepository.save(customer1);
             return ResponseEntity.ok("Customer saved");
         }
-        else {
-            return ResponseEntity.ok("user already exists");
 
-        }
+        return ResponseEntity.ok("Please enter valid national id");
     }
     @PostMapping("/login")
     public Object login(@RequestBody Customer customer){
@@ -137,7 +150,7 @@ public class Maincontroller {
         Bucket bucket=ratelimitservice.resolveBucket(http.getRemoteAddr());
         Customer lc =crepository.findById(id).get();
 
-        UserDTO userDTO=new UserDTO(lc.getFirstName(),lc.getLastName(),lc.getProfession(),lc.getAge(),lc.getGender(), lc.getEmail());
+        UserDTO userDTO=new UserDTO(lc.getFirstName(),lc.getLastName(),lc.getProfession(),lc.getAge(),lc.getGender(), lc.getEmail(), lc.getNationalid(), lc.getPhonenumber());
         if(bucket.tryConsume(1)){
             return userDTO;
         }

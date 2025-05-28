@@ -19,23 +19,33 @@ public class Customer {
     @NotEmpty(message = "last name is required")
     private String lastName;
     private String Profession;
-    private Long nationalId;
-
-    public Long getNationalId() {
-        return nationalId;
-    }
-
-    public void setNationalId(Long nationalId) {
-        this.nationalId = nationalId;
-    }
+    private long nationalid;
 
     private  String username;
     private String password;
     private int Age;
     private double Salary;
+
+    public Long getNationalid() {
+        return nationalid;
+    }
+
+    public void setNationalid(Long nationalid) {
+        this.nationalid = nationalid;
+    }
+
     private String Email;
     private String Gender;
     private String role;
+    private long phonenumber;
+
+    public long getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(long phonenumber) {
+        this.phonenumber = phonenumber;
+    }
 
     public Integer getId() {
         return id;
@@ -120,4 +130,6 @@ public class Customer {
     public void setGender(String gender) {
         Gender = gender;
     }
+
+
 }

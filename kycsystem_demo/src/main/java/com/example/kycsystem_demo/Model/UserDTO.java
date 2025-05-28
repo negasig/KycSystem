@@ -7,6 +7,25 @@ public class UserDTO {
     private Integer age;
     private String gender;
 
+    public long getNationalid() {
+        return nationalid;
+    }
+
+    public void setNationalid(long nationalid) {
+        this.nationalid = nationalid;
+    }
+
+    public long getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(long phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    private long nationalid;
+    private long phonenumber;
+
     public String getEmail() {
         return email;
     }
@@ -18,13 +37,15 @@ public class UserDTO {
     private String email;
    public UserDTO(){}
 
-    public UserDTO(String firstName, String lastName, String profession, Integer age, String gender, String email) {
+    public UserDTO(String firstName, String lastName, String profession, Integer age, String gender, String email, long nationalid, long phonenumber ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.profession = profession;
         this.age = age;
         this.gender = gender;
         this.email=email;
+        this.nationalid=nationalid;
+        this.phonenumber=phonenumber;
     }
 
     public String getFirstName() {
