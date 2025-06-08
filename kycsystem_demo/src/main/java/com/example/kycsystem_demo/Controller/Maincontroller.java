@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.crypto.SecretKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequestMapping("/Api/v1")
 @RestController
@@ -115,6 +112,7 @@ public class Maincontroller {
                     .setSubject(customer.getUsername())
                     .signWith(SignatureAlgorithm.HS256, jwtSecret)
                     .setClaims(users)
+                    .setExpiration(new Date(System.currentTimeMillis()+1000 * 10 * 60))
                     .compact();
         }
         else {

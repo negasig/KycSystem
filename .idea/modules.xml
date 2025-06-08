@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/KycSystem.iml" filepath="$PROJECT_DIR$/.idea/KycSystem.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/kycsystem_demo.iml" filepath="$PROJECT_DIR$/.idea/kycsystem_demo.iml" />
     </modules>
   </component>
 </project>
